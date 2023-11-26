@@ -1,9 +1,35 @@
 import React from "react";
 import "./styles.css";
+import { useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../../firebase";
+import { toast } from "react-toastify";
+import { signOut } from "firebase/auth";
 
 function Header() {
+  const [user, loading] = useAuthState(auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, loading]);
+
   function logoutFnc() {
-    alert("logout");
+    try {
+      signOut(auth)
+        .then(() => {
+          toast.success("logged out Sucessfully!");
+          navigate("/");
+        })
+        .catch((error) => {
+          toast.error("Logged out Sucessfully");
+        });
+    } catch (e) {
+      toast.error(e.message);
+    }
   }
 
   return (
@@ -12,9 +38,11 @@ function Header() {
         <span style={{ fontSize: "1.75rem" }}>💰</span>
         Financely.
       </p>
-      <p className="logo link" onClick={logoutFnc}>
-        Logout
-      </p>
+      {user && (
+        <p className="logo link" onClick={logoutFnc}>
+          Logout
+        </p>
+      )}
     </div>
   );
 }
