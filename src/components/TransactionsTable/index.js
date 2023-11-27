@@ -8,7 +8,11 @@ import { type } from "@testing-library/user-event/dist/type";
 import { parse } from "papaparse";
 import { toast } from "react-toastify";
 
-function TransactionsTable({ transactions, addTransaction }) {
+function TransactionsTable({
+  transactions,
+  addTransaction,
+  fetchTransactions,
+}) {
   const { Option } = Select;
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
@@ -99,8 +103,8 @@ function TransactionsTable({ transactions, addTransaction }) {
           }
         },
       });
-      //   toast.success("All Transactions Added");
-      //   fetchTransactions();
+      toast.success("All Transactions Added");
+      fetchTransactions();
       event.target.files = null;
     } catch (e) {
       //   toast.error(e.message);

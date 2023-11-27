@@ -11,6 +11,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { query } from "firebase/firestore";
 import { getDocs } from "firebase/firestore";
 import TransactionsTable from "../components/TransactionsTable";
+import ChartComponent from "../components/Charts";
+import NoTransactions from "../components/NoTransactions";
 
 // import { Modal } from "antd";
 // const sampltransactions = [
@@ -81,7 +83,7 @@ function Dashboard() {
         transaction
       );
       console.log("Document written with ID: ", docRef.id);
-      toast.success("Transaction Added!");
+      if (!many) toast.success("Transaction Added!");
       let newArr = transactions;
       newArr.push(transaction);
       setTransactions(newArr);
@@ -148,6 +150,7 @@ function Dashboard() {
             showExpenseModal={showExpenseModal}
             showIncomeModal={showIncomeModal}
           />
+          {transactions.length != 0 ? <ChartComponent /> : <NoTransactions />}
           <AddExpense
             isExpenseModalVisible={isExpenseModalVisible}
             handleExpenseCancel={handleExpenseCancel}
@@ -161,6 +164,7 @@ function Dashboard() {
           <TransactionsTable
             transactions={transactions}
             addTransaction={addTransaction}
+            fetchTransactions={fetchTransactions}
           />
         </>
       )}
