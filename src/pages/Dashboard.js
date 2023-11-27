@@ -74,7 +74,7 @@ function Dashboard() {
     addTransaction(newTransaction);
   };
 
-  async function addTransaction(transaction) {
+  async function addTransaction(transaction, many) {
     try {
       const docRef = await addDoc(
         collection(db, `users/${user.uid}/transactions`),
@@ -158,7 +158,10 @@ function Dashboard() {
             handleIncomeCancel={handleIncomeCancel}
             onFinish={onFinish}
           />
-          <TransactionsTable transactions={transactions} />
+          <TransactionsTable
+            transactions={transactions}
+            addTransaction={addTransaction}
+          />
         </>
       )}
     </div>
