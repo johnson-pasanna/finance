@@ -12,36 +12,39 @@ import { query } from "firebase/firestore";
 import { getDocs } from "firebase/firestore";
 
 // import { Modal } from "antd";
-const sampletransactions = [
-  {
-    name: "Pay day",
-    type: "income",
-    date: "2023-01-15",
-    amount: 2000,
-    tag: "salary",
-  },
-  {
-    name: "Dinner",
-    type: "expense",
-    date: "2023-01-20",
-    amount: 500,
-    tag: "food",
-  },
-  {
-    name: "Books",
-    type: "expense",
-    date: "2023-01-25",
-    amount: 300,
-    tag: "education",
-  },
-];
+// const sampltransactions = [
+//   {
+//     name: "Pay day",
+//     type: "income",
+//     date: "2023-01-15",
+//     amount: 2000,
+//     tag: "salary",
+//   },
+//   {
+//     name: "Dinner",
+//     type: "expense",
+//     date: "2023-01-20",
+//     amount: 500,
+//     tag: "food",
+//   },
+//   {
+//     name: "Books",
+//     type: "expense",
+//     date: "2023-01-25",
+//     amount: 300,
+//     tag: "education",
+//   },
+// ];
 
 function Dashboard() {
   const user = useAuthState;
-  const [transaction, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isExpenseModalVisible, setIsExpenseModalVisible] = useState(false);
   const [isIncomeModalVisible, setIsIncomeModalVisible] = useState(false);
+  const [totalBalance, setTotalBalance] = useState(0);
+  const [income, setIncome] = useState(0);
+  const [expense, setExpense] = useState(0);
 
   const showExpenseModal = () => {
     setIsExpenseModalVisible(true);
@@ -106,6 +109,27 @@ function Dashboard() {
     fetchTransactions();
   }, []);
 
+  useEffect(() => {
+    calculateBalance();
+  }, [transactions]);
+
+  const calculateBalance = () => {
+    let incomeTotal = 0;
+    let expensesTotal = 0;
+
+    transactions.forEach((transaction) => {
+      if (transaction.type === "income") {
+        incomeTotal += transaction.amount;
+      } else {
+        expensesTotal += transaction.amount;
+      }
+    });
+
+    setIncome(incomeTotal);
+    setExpense(expensesTotal);
+    setTotalBalance(incomeTotal - expensesTotal);
+  };
+
   async function fetchTransactions() {
     setLoading(true);
     if (user) {
@@ -130,6 +154,9 @@ function Dashboard() {
       ) : (
         <>
           <Cards
+            income={income}
+            expense={expense}
+            totalBalance={totalBalance}
             showExpenseModal={showExpenseModal}
             showIncomeModal={showIncomeModal}
           />
