@@ -10,6 +10,7 @@ import { db } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { query } from "firebase/firestore";
 import { getDocs } from "firebase/firestore";
+import TransactionsTable from "../components/TransactionsTable";
 
 // import { Modal } from "antd";
 // const sampltransactions = [
@@ -81,29 +82,16 @@ function Dashboard() {
       );
       console.log("Document written with ID: ", docRef.id);
       toast.success("Transaction Added!");
+      let newArr = transactions;
+      newArr.push(transaction);
+      setTransactions(newArr);
+      calculateBalance();
     } catch (e) {
       console.error("Error adding document: ", e);
 
       toast.error("Couldn't add transaction");
     }
   }
-
-  // const calculateBalance = () => {
-  //   let incomeTotal = 0;
-  //   let expensesTotal = 0;
-
-  //   transactions.forEach((transaction) => {
-  //     if (transaction.type === "income") {
-  //       incomeTotal += transaction.amount;
-  //     } else {
-  //       expensesTotal += transaction.amount;
-  //     }
-  //   });
-
-  //   setIncome(incomeTotal);
-  //   setExpenses(expensesTotal);
-  //   setCurrentBalance(incomeTotal - expensesTotal);
-  // };
 
   useEffect(() => {
     fetchTransactions();
@@ -170,6 +158,7 @@ function Dashboard() {
             handleIncomeCancel={handleIncomeCancel}
             onFinish={onFinish}
           />
+          <TransactionsTable transactions={transactions} />
         </>
       )}
     </div>

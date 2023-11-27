@@ -12,20 +12,6 @@ function Cards({
 }) {
   return (
     <div>
-      {/* <Row className="my-row">
-        <Card className="my-card" title="Current Balance">
-          <p> $0</p>
-          <Button text="Reset Balance" blue={true} />
-        </Card>
-        <Card className="my-card" title="Current Balance">
-          <p> $0</p>
-          <Button text="Reset Balance" blue={true} />
-        </Card>
-        <Card className="my-card" title="Current Balance">
-          <p> $0</p>
-          <Button text="Reset Balance" blue={true} />
-        </Card>
-      </Row> */}
       <Row className="my-row">
         <Card bordered={true} className="my-card">
           <h2>Current Balance</h2>
